@@ -9,5 +9,5 @@ public record MovieDetails
     public string? Duration { get; set; }
 
     public int MovieId { get; set; }
-    public Movie Movie { get; set; } = null!;
+    public MovieFilm Movie { get; set; } = null!;
 }

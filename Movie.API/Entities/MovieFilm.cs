@@ -1,6 +1,6 @@
 ﻿namespace Movie.API.Entities;
 
-public class Movie
+public class MovieFilm
 {
     public int Id { get; set; }
     public string Title { get; set; } = null!;

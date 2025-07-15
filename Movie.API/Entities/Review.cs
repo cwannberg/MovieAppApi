@@ -8,6 +8,6 @@ namespace Movie.API.Entities
         public string ReviewerName { get; set; } = null!;
         public int Rating { get; set; }
         public int MovieId { get; set; }
-        public Movie Movie { get; set; } = null!;
+        public MovieFilm Movie { get; set; } = null!;
     }
 }
