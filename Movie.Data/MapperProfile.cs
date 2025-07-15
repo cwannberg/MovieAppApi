@@ -2,7 +2,7 @@
 using Movie.Core.Dtos;
 using Movie.Core.Entities;
 
-namespace Movie.API.Data
+namespace Movie.Data
 {
     public class MapperProfile : Profile
     {

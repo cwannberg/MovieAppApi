@@ -1,9 +1,15 @@
 ﻿
+
+
 using Bogus;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Movie.Core.Entities;
 
-namespace Movie.API.Services
+namespace Movie.Services
 {
     public class DataSeedHostingService : IHostedService
     {
@@ -19,7 +25,7 @@ namespace Movie.API.Services
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             using var scope = serviceProvider.CreateScope();
-            var env = serviceProvider.GetRequiredService<IWebHostEnvironment>();
+            var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
             if (!env.IsDevelopment()) return;
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             if (await context.Actors.AnyAsync(cancellationToken)) return;
@@ -55,7 +61,7 @@ namespace Movie.API.Services
             {
                 Genre genre = GenerateGenre();
                 await context.SaveChangesAsync(cancellationToken);
-                logger.LogInformation("Genreseed complete.");
+                logger.LogInformation("Genre seed complete.");
             }
             catch (Exception ex)
             {

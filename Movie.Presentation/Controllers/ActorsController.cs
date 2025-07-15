@@ -1,56 +1,60 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Movie.Core.Dtos;
 using Movie.Core.Entities;
 
-namespace Movie.API.Controllers
+namespace Movie.Presentation.Controllers
 {
-    [Route("api/movies")]
+    [Route("api/actors")]
     [ApiController]
-    public class MoviesController : ControllerBase
+    public class ActorsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
 
         public IMapper mapper { get; }
 
-        public MoviesController(ApplicationDbContext context, IMapper mapper)
+        public ActorsController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        // GET: api/Movies
+        // GET: api/Actors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovieFilm>>> GetMovie()
+        public async Task<ActionResult<IEnumerable<ActorDto>>> GetActor()
         {
-            return await context.Movies.ToListAsync();
+            var actors = await context.Actors.ToListAsync();
+            var actorDto = mapper.Map<IEnumerable<ActorDto>>(actors);
+
+            return Ok(actorDto);
         }
 
-        // GET: api/Movies/5
+        // GET: api/Actors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<MovieFilm>> GetMovie(int id)
+        public async Task<ActionResult<Actor>> GetActor(int id)
         {
-            var movie = await context.Movies.FindAsync(id);
+            var actor = await context.Actors.FindAsync(id);
 
-            if (movie == null)
+            if (actor == null)
             {
                 return NotFound();
             }
 
-            return movie;
+            return actor;
         }
 
-        // PUT: api/Movies/5
+        // PUT: api/Actors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(int id, MovieFilm movie)
+        public async Task<IActionResult> PutActor(int id, Actor actor)
         {
-            if (id != movie.Id)
+            if (id != actor.Id)
             {
                 return BadRequest();
             }
 
-            context.Entry(movie).State = EntityState.Modified;
+            context.Entry(actor).State = EntityState.Modified;
 
             try
             {
@@ -58,7 +62,7 @@ namespace Movie.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MovieExists(id))
+                if (!ActorExists(id))
                 {
                     return NotFound();
                 }
@@ -71,36 +75,36 @@ namespace Movie.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Movies
+        // POST: api/Actors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<MovieFilm>> PostMovie(MovieFilm movie)
+        public async Task<ActionResult<Actor>> PostActor(Actor actor)
         {
-            context.Movies.Add(movie);
+            context.Actors.Add(actor);
             await context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
+            return CreatedAtAction("GetActor", new { id = actor.Id }, actor);
         }
 
-        // DELETE: api/Movies/5
+        // DELETE: api/Actors/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMovie(int id)
+        public async Task<IActionResult> DeleteActor(int id)
         {
-            var movie = await context.Movies.FindAsync(id);
-            if (movie == null)
+            var actor = await context.Actors.FindAsync(id);
+            if (actor == null)
             {
                 return NotFound();
             }
 
-            context.Movies.Remove(movie);
+            context.Actors.Remove(actor);
             await context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool MovieExists(int id)
+        private bool ActorExists(int id)
         {
-            return context.Movies.Any(e => e.Id == id);
+            return context.Actors.Any(e => e.Id == id);
         }
     }
 }

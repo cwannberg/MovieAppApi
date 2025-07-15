@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Movie.Core.Entities;
-namespace Movie.API.Data.Configurations;
+namespace Movie.Data.Configurations;
 
 public class MovieDetailsConfigurations : IEntityTypeConfiguration<MovieDetails>
 {

@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Movie.API.Data;
-using Movie.API.Services;
+using Movie.Data;
+using Movie.Services;
 
 namespace Movie.API
 {
@@ -10,9 +9,13 @@ namespace Movie.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationDbContext") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContext' not found.")));
 
+            var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContext")
+                ?? throw new InvalidOperationException("Connection string 'ApplicationDbContext' not found.");
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString,
+                    b => b.MigrationsAssembly("Movie.Data")));
             // Add services to the container.
 
             builder.Services.AddControllers();

@@ -1,60 +1,55 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Movie.Core.Dtos;
 using Movie.Core.Entities;
 
-namespace Movie.API.Controllers
+namespace Movie.Presentation.Controllers
 {
-    [Route("api/actors")]
+    [Route("api/reviews")]
     [ApiController]
-    public class ActorsController : ControllerBase
+    public class ReviewsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
-
         public IMapper mapper { get; }
 
-        public ActorsController(ApplicationDbContext context, IMapper mapper)
+        public ReviewsController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        // GET: api/Actors
+        // GET: api/Reviews
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ActorDto>>> GetActor()
+        public async Task<ActionResult<IEnumerable<Review>>> GetReview()
         {
-            var actors = await context.Actors.ToListAsync();
-            var actorDto = mapper.Map<IEnumerable<ActorDto>>(actors);
-
-            return Ok(actorDto);
+            return await context.Review.ToListAsync();
         }
 
-        // GET: api/Actors/5
+        // GET: api/Reviews/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Actor>> GetActor(int id)
+        public async Task<ActionResult<Review>> GetReview(int id)
         {
-            var actor = await context.Actors.FindAsync(id);
+            var review = await context.Review.FindAsync(id);
 
-            if (actor == null)
+            if (review == null)
             {
                 return NotFound();
             }
 
-            return actor;
+            return review;
         }
 
-        // PUT: api/Actors/5
+        // PUT: api/Reviews/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActor(int id, Actor actor)
+        public async Task<IActionResult> PutReview(int id, Review review)
         {
-            if (id != actor.Id)
+            if (id != review.Id)
             {
                 return BadRequest();
             }
 
-            context.Entry(actor).State = EntityState.Modified;
+            context.Entry(review).State = EntityState.Modified;
 
             try
             {
@@ -62,7 +57,7 @@ namespace Movie.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ActorExists(id))
+                if (!ReviewExists(id))
                 {
                     return NotFound();
                 }
@@ -75,36 +70,36 @@ namespace Movie.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Actors
+        // POST: api/Reviews
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Actor>> PostActor(Actor actor)
+        public async Task<ActionResult<Review>> PostReview(Review review)
         {
-            context.Actors.Add(actor);
+            context.Review.Add(review);
             await context.SaveChangesAsync();
 
-            return CreatedAtAction("GetActor", new { id = actor.Id }, actor);
+            return CreatedAtAction("GetReview", new { id = review.Id }, review);
         }
 
-        // DELETE: api/Actors/5
+        // DELETE: api/Reviews/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteActor(int id)
+        public async Task<IActionResult> DeleteReview(int id)
         {
-            var actor = await context.Actors.FindAsync(id);
-            if (actor == null)
+            var review = await context.Review.FindAsync(id);
+            if (review == null)
             {
                 return NotFound();
             }
 
-            context.Actors.Remove(actor);
+            context.Review.Remove(review);
             await context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ActorExists(int id)
+        private bool ReviewExists(int id)
         {
-            return context.Actors.Any(e => e.Id == id);
+            return context.Review.Any(e => e.Id == id);
         }
     }
 }

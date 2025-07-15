@@ -3,53 +3,54 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Movie.Core.Entities;
 
-namespace Movie.API.Controllers
+namespace Movie.Presentation.Controllers
 {
-    [Route("api/reviews")]
+    [Route("api/movies")]
     [ApiController]
-    public class ReviewsController : ControllerBase
+    public class MoviesController : ControllerBase
     {
         private readonly ApplicationDbContext context;
+
         public IMapper mapper { get; }
 
-        public ReviewsController(ApplicationDbContext context, IMapper mapper)
+        public MoviesController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        // GET: api/Reviews
+        // GET: api/Movies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Review>>> GetReview()
+        public async Task<ActionResult<IEnumerable<MovieFilm>>> GetMovie()
         {
-            return await context.Review.ToListAsync();
+            return await context.Movies.ToListAsync();
         }
 
-        // GET: api/Reviews/5
+        // GET: api/Movies/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Review>> GetReview(int id)
+        public async Task<ActionResult<MovieFilm>> GetMovie(int id)
         {
-            var review = await context.Review.FindAsync(id);
+            var movie = await context.Movies.FindAsync(id);
 
-            if (review == null)
+            if (movie == null)
             {
                 return NotFound();
             }
 
-            return review;
+            return movie;
         }
 
-        // PUT: api/Reviews/5
+        // PUT: api/Movies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReview(int id, Review review)
+        public async Task<IActionResult> PutMovie(int id, MovieFilm movie)
         {
-            if (id != review.Id)
+            if (id != movie.Id)
             {
                 return BadRequest();
             }
 
-            context.Entry(review).State = EntityState.Modified;
+            context.Entry(movie).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +58,7 @@ namespace Movie.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ReviewExists(id))
+                if (!MovieExists(id))
                 {
                     return NotFound();
                 }
@@ -70,36 +71,36 @@ namespace Movie.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Reviews
+        // POST: api/Movies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Review>> PostReview(Review review)
+        public async Task<ActionResult<MovieFilm>> PostMovie(MovieFilm movie)
         {
-            context.Review.Add(review);
+            context.Movies.Add(movie);
             await context.SaveChangesAsync();
 
-            return CreatedAtAction("GetReview", new { id = review.Id }, review);
+            return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
         }
 
-        // DELETE: api/Reviews/5
+        // DELETE: api/Movies/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReview(int id)
+        public async Task<IActionResult> DeleteMovie(int id)
         {
-            var review = await context.Review.FindAsync(id);
-            if (review == null)
+            var movie = await context.Movies.FindAsync(id);
+            if (movie == null)
             {
                 return NotFound();
             }
 
-            context.Review.Remove(review);
+            context.Movies.Remove(movie);
             await context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ReviewExists(int id)
+        private bool MovieExists(int id)
         {
-            return context.Review.Any(e => e.Id == id);
+            return context.Movies.Any(e => e.Id == id);
         }
     }
 }

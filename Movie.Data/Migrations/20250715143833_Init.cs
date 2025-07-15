@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Movie.API.Migrations
+namespace Movie.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -25,7 +25,7 @@ namespace Movie.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genre",
+                name: "Genres",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -34,7 +34,7 @@ namespace Movie.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genre", x => x.Id);
+                    table.PrimaryKey("PK_Genres", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,9 +52,9 @@ namespace Movie.API.Migrations
                 {
                     table.PrimaryKey("PK_Movies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Movies_Genre_GenreId",
+                        name: "FK_Movies_Genres_GenreId",
                         column: x => x.GenreId,
-                        principalTable: "Genre",
+                        principalTable: "Genres",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -168,7 +168,7 @@ namespace Movie.API.Migrations
                 name: "Movies");
 
             migrationBuilder.DropTable(
-                name: "Genre");
+                name: "Genres");
         }
     }
 }

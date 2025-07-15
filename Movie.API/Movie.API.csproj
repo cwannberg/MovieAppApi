@@ -10,8 +10,8 @@
     <PackageReference Include="AutoMapper" Version="15.0.1" />
     <PackageReference Include="Bogus" Version="35.6.3" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -20,6 +20,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Movie.Core\Movie.Core.csproj" />
+    <ProjectReference Include="..\Movie.Data\Movie.Data.csproj" />
+    <ProjectReference Include="..\Movie.Presentation\Movie.Presentation.csproj" />
+    <ProjectReference Include="..\Movie.Services\Movie.Services.csproj" />
   </ItemGroup>
 
 </Project>
