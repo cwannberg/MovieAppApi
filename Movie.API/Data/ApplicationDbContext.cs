@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Movie.API.Data.Configurations;
-using Movie.API.Entities;
+using Movie.Core.Entities;
 
 public class ApplicationDbContext : DbContext
 {

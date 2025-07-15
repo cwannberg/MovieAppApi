@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Movie.API.Dtos;
 using Movie.API.Entities;
+using Movie.Core.Dtos;
+using Movie.Core.Entities;
 
 namespace Movie.API.Controllers
 {
@@ -18,7 +20,7 @@ namespace Movie.API.Controllers
 
         // GET: api/Actors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Actor>>> GetActor()
+        public async Task<ActionResult<IEnumerable<ActorDto>>> GetActor()
         {
             return await context.Actors.ToListAsync();
         }

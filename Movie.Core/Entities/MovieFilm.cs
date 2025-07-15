@@ -1,4 +1,4 @@
-﻿namespace Movie.API.Entities;
+﻿namespace Movie.Core.Entities;
 
 public class MovieFilm
 {
