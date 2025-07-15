@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Movie.API.Entities;
+using Movie.Core.Entities;
 
 namespace Movie.API.Controllers
 {
@@ -13,25 +9,27 @@ namespace Movie.API.Controllers
     [ApiController]
     public class ReviewsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext context;
+        public IMapper mapper { get; }
 
-        public ReviewsController(ApplicationDbContext context)
+        public ReviewsController(ApplicationDbContext context, IMapper mapper)
         {
-            _context = context;
+            this.context = context;
+            this.mapper = mapper;
         }
 
         // GET: api/Reviews
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Review>>> GetReview()
         {
-            return await _context.Review.ToListAsync();
+            return await context.Review.ToListAsync();
         }
 
         // GET: api/Reviews/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Review>> GetReview(int id)
         {
-            var review = await _context.Review.FindAsync(id);
+            var review = await context.Review.FindAsync(id);
 
             if (review == null)
             {
@@ -51,11 +49,11 @@ namespace Movie.API.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(review).State = EntityState.Modified;
+            context.Entry(review).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -77,8 +75,8 @@ namespace Movie.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Review>> PostReview(Review review)
         {
-            _context.Review.Add(review);
-            await _context.SaveChangesAsync();
+            context.Review.Add(review);
+            await context.SaveChangesAsync();
 
             return CreatedAtAction("GetReview", new { id = review.Id }, review);
         }
@@ -87,21 +85,21 @@ namespace Movie.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReview(int id)
         {
-            var review = await _context.Review.FindAsync(id);
+            var review = await context.Review.FindAsync(id);
             if (review == null)
             {
                 return NotFound();
             }
 
-            _context.Review.Remove(review);
-            await _context.SaveChangesAsync();
+            context.Review.Remove(review);
+            await context.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool ReviewExists(int id)
         {
-            return _context.Review.Any(e => e.Id == id);
+            return context.Review.Any(e => e.Id == id);
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿
 using Bogus;
 using Microsoft.EntityFrameworkCore;
-using Movie.API.Entities;
+using Movie.Core.Entities;
 
 namespace Movie.API.Services
 {
-    public class DataSeedHostingService : IHostedService 
+    public class DataSeedHostingService : IHostedService
     {
         private readonly IServiceProvider serviceProvider;
         private readonly ILogger<DataSeedHostingService> logger;
@@ -79,7 +79,7 @@ namespace Movie.API.Services
 
             var faker = new Faker<MovieFilm>("sv").Rules((f, m) =>
             {
-                m.Title = movieNames[f.Random.Int(0, movieNames.Length -1)];
+                m.Title = movieNames[f.Random.Int(0, movieNames.Length - 1)];
                 m.Year = f.Random.Int(min: 1955, max: 2025);
                 m.Genre = GenerateGenre();
             });
@@ -97,5 +97,5 @@ namespace Movie.API.Services
         }
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
     }
-    
+
 }

@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Movie.API.Dtos;
-using Movie.API.Entities;
 using Movie.Core.Dtos;
 using Movie.Core.Entities;
 
@@ -13,16 +12,22 @@ namespace Movie.API.Controllers
     {
         private readonly ApplicationDbContext context;
 
-        public ActorsController(ApplicationDbContext context)
+        public IMapper mapper { get; }
+
+        public ActorsController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         // GET: api/Actors
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ActorDto>>> GetActor()
         {
-            return await context.Actors.ToListAsync();
+            var actors = await context.Actors.ToListAsync();
+            var actorDto = mapper.Map<IEnumerable<ActorDto>>(actors);
+
+            return Ok(actorDto);
         }
 
         // GET: api/Actors/5

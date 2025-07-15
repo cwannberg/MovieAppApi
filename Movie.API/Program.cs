@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Movie.API.Data;
 using Movie.API.Services;
 
 namespace Movie.API
@@ -19,6 +20,8 @@ namespace Movie.API
             builder.Services.AddOpenApi();
 
             builder.Services.AddHostedService<DataSeedHostingService>();
+
+            builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
 
             var app = builder.Build();
 
