@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Movie.API.Dtos;
 using Movie.API.Entities;
 
 namespace Movie.API.Controllers

@@ -7,6 +7,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Actor> Actors { get; set; } = default!;
     public DbSet<MovieFilm> Movies { get; set; } = default!;
     public DbSet<Review> Review { get; set; } = default!;
+    public DbSet<Genre> Genres { get; set; } = default!;
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
