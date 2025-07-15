@@ -9,7 +9,7 @@ using Movie.API.Entities;
 
 namespace Movie.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/reviews")]
     [ApiController]
     public class ReviewsController : ControllerBase
     {
