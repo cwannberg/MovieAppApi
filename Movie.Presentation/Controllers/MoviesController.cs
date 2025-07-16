@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Movie.Core.Entities;
+using Movie.Core.Dtos;
 using Movie.Services.Contracts;
 
 namespace Movie.Presentation.Controllers
@@ -19,11 +20,11 @@ namespace Movie.Presentation.Controllers
 
         // GET: api/Movies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovieFilm>>> GetMovie()
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovie()
         {
-            return await serviceManager.MovieService.GetMoviesAsync();
+            return Ok(await serviceManager.MovieService.GetMoviesAsync());
         }
-
+/*
         // GET: api/Movies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieFilm>> GetMovie(int id)
@@ -94,6 +95,6 @@ namespace Movie.Presentation.Controllers
         private bool MovieExists(int id)
         {
             return context.Movies.Any(e => e.Id == id);
-        }
+        }*/
     }
 }

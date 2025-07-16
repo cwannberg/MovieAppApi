@@ -1,4 +1,5 @@
-﻿using Movie.Core.Dtos;
+﻿using AutoMapper;
+using Movie.Core.Dtos;
 using Movie.Services.Contracts;
 
 namespace Movie.Services
@@ -6,15 +7,17 @@ namespace Movie.Services
     public class MovieService : IMovieService
     {
         private IUnitOfWork uow;
+        private readonly IMapper mapper;
 
-        public MovieService(IUnitOfWork uow)
+        public MovieService(IUnitOfWork uow, IMapper mapper)
         {
             this.uow = uow;
+            this.mapper = mapper;
         }
 
-        public Task<IEnumerable<MovieDto>> GetMoviesAsync()
+        public async Task<IEnumerable<MovieDto>> GetMoviesAsync()
         {
-            throw new NotImplementedException();
+            return mapper.Map<IEnumerable<MovieDto>>(await uow.MovieRepository.GetMovieAsync());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Movie.Services.Contracts;
+﻿using AutoMapper;
+using Movie.Services.Contracts;
 
 namespace Movie.Services;
 
@@ -11,9 +12,9 @@ public class ServiceManager : IServiceManager
     public IMovieService MovieService => _movieService.Value;
     public IActorService ActorService => _actorService.Value;
     public IReviewService ReviewService => _reviewService.Value;
-    public ServiceManager(IUnitOfWork uow)
+    public ServiceManager(IUnitOfWork uow, IMapper mapper)
     {
-        _movieService = new Lazy<IMovieService>(() => new MovieService(uow));
+        _movieService = new Lazy<IMovieService>(() => new MovieService(uow, mapper));
         _reviewService = new Lazy<IReviewService>(() => new ReviewService(uow));
         _actorService = new Lazy<IActorService>(() => new ActorService(uow));
     }
