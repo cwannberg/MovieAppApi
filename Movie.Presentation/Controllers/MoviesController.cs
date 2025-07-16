@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Movie.Core.Entities;
+using Movie.Services.Contracts;
 
 namespace Movie.Presentation.Controllers
 {
@@ -9,21 +10,18 @@ namespace Movie.Presentation.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private readonly ApplicationDbContext context;
+        private readonly IServiceManager serviceManager;
 
-        public IMapper mapper { get; }
-
-        public MoviesController(ApplicationDbContext context, IMapper mapper)
+        public MoviesController(IServiceManager serviceManager)
         {
-            this.context = context;
-            this.mapper = mapper;
+            this.serviceManager = serviceManager;
         }
 
         // GET: api/Movies
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieFilm>>> GetMovie()
         {
-            return await context.Movies.ToListAsync();
+            return await serviceManager.MovieService.GetMoviesAsync();
         }
 
         // GET: api/Movies/5
@@ -31,11 +29,6 @@ namespace Movie.Presentation.Controllers
         public async Task<ActionResult<MovieFilm>> GetMovie(int id)
         {
             var movie = await context.Movies.FindAsync(id);
-
-            if (movie == null)
-            {
-                return NotFound();
-            }
 
             return movie;
         }

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Movie.Core.DomainContracts;
 using Movie.Data;
 using Movie.Data.Repositories;
 using Movie.Services;
+using Movie.Services.Contracts;
 
 namespace Movie.API
 {
@@ -28,6 +28,7 @@ namespace Movie.API
 
             builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapperProfile>());
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IServiceManager, ServiceManager>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
