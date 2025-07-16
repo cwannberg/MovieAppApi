@@ -1,7 +1,4 @@
-﻿
-
-
-using Bogus;
+﻿using Bogus;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

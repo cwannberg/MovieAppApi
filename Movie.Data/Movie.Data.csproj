@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Movie.Contracts\Movie.Contracts.csproj" />
     <ProjectReference Include="..\Movie.Core\Movie.Core.csproj" />
   </ItemGroup>
 
