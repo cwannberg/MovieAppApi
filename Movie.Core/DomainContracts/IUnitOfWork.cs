@@ -2,8 +2,8 @@
 
 public interface IUnitOfWork
 {
-    IMovieRepository Movies { get; }
-    IReviewRepository Reviews { get; }
-    IActorRepository Actors { get; }
+    IMovieRepository MovieRepository { get; }
+    IReviewRepository ReviewRepository { get; }
+    IActorRepository ActorRepository { get; }
     Task CompleteAsync();
 }

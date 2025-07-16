@@ -12,16 +12,13 @@ public class MovieRepository : IMovieRepository
     {
         _context = context;
     }
-    public async Task<IEnumerable<MovieFilm>> GetMovieAsync()
+    public async Task<List<MovieFilm>> GetMovieAsync()
     {
         return await _context.Movies.ToListAsync();
     }
     public async Task<MovieFilm> GetMovieAsync(int id)
     {
-        if (MovieExists(id))
-            return await _context.Movies.FindAsync(id);
-        else
-            return null;
+         return await _context.Movies.Where(m => m.Id == id).FirstOrDefaultAsync();
     }
     public async Task PutMovieAsync(int id, MovieFilm movie)
     {

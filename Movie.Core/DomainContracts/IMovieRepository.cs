@@ -4,7 +4,7 @@ namespace Movie.Core.DomainContracts;
 
 public interface IMovieRepository 
 {
-    Task<IEnumerable<MovieFilm>> GetMovieAsync();
+    Task<List<MovieFilm>> GetMovieAsync();
     Task<MovieFilm> GetMovieAsync(int id);
     Task PutMovieAsync(int id, MovieFilm movie);
     Task PostMovieAsync(MovieFilm movie);
