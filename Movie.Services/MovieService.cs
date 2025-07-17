@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Movie.Core.Dtos;
 using Movie.Services.Contracts;
 
@@ -15,9 +16,29 @@ namespace Movie.Services
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<MovieDto>> GetMoviesAsync()
+        public async Task<IEnumerable<MovieDto>> GetAllAsync()
         {
-            return mapper.Map<IEnumerable<MovieDto>>(await uow.MovieRepository.GetMovieAsync());
+            return mapper.Map<IEnumerable<MovieDto>>(await uow.MovieRepository.GetAllAsync());
+        }
+        public async Task<MovieDto> GetAsync(int id)
+        {
+            var movie = await uow.MovieRepository.GetAsync(id);
+            return mapper.Map<MovieDto>(movie);
+        }
+
+        public Task PutAsync(int id, MovieDto item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task PostAsync(MovieDto item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

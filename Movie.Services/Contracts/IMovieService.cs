@@ -2,9 +2,12 @@
 
 namespace Movie.Services.Contracts
 {
-    public interface IMovieService
+    public interface IMovieService : IBaseService<MovieDto>
     {
-
-        Task<IEnumerable<MovieDto>> GetMoviesAsync();
+        Task<IEnumerable<MovieDto>> GetAllAsync();
+        Task<MovieDto> GetAsync(int id);
+        Task PutAsync(int id, MovieDto item);
+        Task PostAsync(MovieDto item);
+        Task DeleteAsync(int id);
     }
 }

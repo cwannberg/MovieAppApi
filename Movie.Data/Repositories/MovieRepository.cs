@@ -12,35 +12,27 @@ public class MovieRepository : IMovieRepository
     {
         _context = context;
     }
-    public async Task<List<MovieFilm>> GetMovieAsync()
-    {
-        return await _context.Movies.ToListAsync();
-    }
-    public async Task<MovieFilm> GetMovieAsync(int id)
-    {
-         return await _context.Movies.Where(m => m.Id == id).FirstOrDefaultAsync();
-    }
-    public async Task PutMovieAsync(int id, MovieFilm movie)
+
+    public async Task<List<MovieFilm>> GetAllAsync() => await _context.Movies.ToListAsync();
+
+    public async Task<MovieFilm> GetAsync(int id) => await _context.Movies.Where(m => m.Id == id).FirstOrDefaultAsync();
+
+    public async Task PutAsync(int id, MovieFilm movie)
     {
         _context.Entry(movie).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
-    public async Task PostMovieAsync(MovieFilm movie)
+
+    public async Task PostAsync(MovieFilm movie)
     {
         _context.Movies.Add(movie);
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteMovie(int id)
+
+    public async Task DeleteAsync(int id)
     {
-        if (MovieExists(id))
-        {
-            var movie = await _context.Movies.FindAsync(id);
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
-        }
-    }
-    private bool MovieExists(int id)
-    {
-        return _context.Movies.Any(e => e.Id == id);
+        var movie = await _context.Movies.FindAsync(id);
+        _context.Movies.Remove(movie);
+        await _context.SaveChangesAsync();
     }
 }
