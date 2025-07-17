@@ -21,8 +21,20 @@ namespace Movie.Services
         public async Task<MovieDto> PostAsync(MovieCreateDto movieDto)
         {
             var movie = mapper.Map<MovieFilm>(movieDto);
+
+            // Validera: om GenreId är satt, kontrollera att den finns
+            if (movieDto.GenreId.HasValue)
+            {
+                var genreExists = await uow.GenreRepository.ExistsAsync(movieDto.GenreId.Value);
+            }
+
             await uow.MovieRepository.PostAsync(movie);
+            await uow.CompleteAsync();
+
             return mapper.Map<MovieDto>(movie);
+            //var movie = mapper.Map<MovieFilm>(movieDto);
+            //await uow.MovieRepository.PostAsync(movie);
+            //return mapper.Map<MovieDto>(movie);
         }
         public async Task DeleteAsync(int id) => await uow.MovieRepository.DeleteAsync(id);
     }

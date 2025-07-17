@@ -8,8 +8,8 @@ public class MovieFilm
     public string? Duration { get; set; }
 
     //1-1
-    public int GenreId { get; set; }
-    public Genre Genre { get; set; } = null!;
+    public int? GenreId { get; set; }
+    public Genre? Genre { get; set; } = null!;
 
     //1-1
     public MovieDetails MovieDetails { get; set; } = null!;

@@ -6,5 +6,6 @@ namespace Movie.Core.DomainContracts
     {
         Task<List<Genre>> GetAllAsync();
         Task PostAsync(Genre item);
+        Task<bool> ExistsAsync(int genreId);
     }
 }
