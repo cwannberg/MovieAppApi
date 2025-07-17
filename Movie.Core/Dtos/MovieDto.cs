@@ -4,6 +4,7 @@ namespace Movie.Core.Dtos;
 
 public class MovieDto
 {
+    public int Id { get; set; }
     [Required]
     public string Title { get; set; } = null!;
     [Required]

@@ -7,7 +7,7 @@ namespace Movie.Services.Contracts
         Task<IEnumerable<MovieDto>> GetAllAsync();
         Task<MovieDto> GetAsync(int id);
         Task PutAsync(int id, MovieDto item);
-        Task PostAsync(MovieDto item);
+        Task<MovieDto> PostAsync(MovieCreateDto item);
         Task DeleteAsync(int id);
     }
 }

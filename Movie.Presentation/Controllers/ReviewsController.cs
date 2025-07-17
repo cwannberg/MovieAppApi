@@ -22,14 +22,14 @@ namespace Movie.Presentation.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Review>>> GetReview()
         {
-            return await context.Review.ToListAsync();
+            return await context.Reviews.ToListAsync();
         }
 
         // GET: api/Reviews/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Review>> GetReview(int id)
         {
-            var review = await context.Review.FindAsync(id);
+            var review = await context.Reviews.FindAsync(id);
 
             if (review == null)
             {
@@ -75,7 +75,7 @@ namespace Movie.Presentation.Controllers
         [HttpPost]
         public async Task<ActionResult<Review>> PostReview(Review review)
         {
-            context.Review.Add(review);
+            context.Reviews.Add(review);
             await context.SaveChangesAsync();
 
             return CreatedAtAction("GetReview", new { id = review.Id }, review);
@@ -85,13 +85,13 @@ namespace Movie.Presentation.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReview(int id)
         {
-            var review = await context.Review.FindAsync(id);
+            var review = await context.Reviews.FindAsync(id);
             if (review == null)
             {
                 return NotFound();
             }
 
-            context.Review.Remove(review);
+            context.Reviews.Remove(review);
             await context.SaveChangesAsync();
 
             return NoContent();
@@ -99,7 +99,7 @@ namespace Movie.Presentation.Controllers
 
         private bool ReviewExists(int id)
         {
-            return context.Review.Any(e => e.Id == id);
+            return context.Reviews.Any(e => e.Id == id);
         }
     }
 }

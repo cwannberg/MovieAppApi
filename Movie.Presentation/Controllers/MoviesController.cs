@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Movie.Core.Dtos;
 using Movie.Services.Contracts;
+using System.Threading.Tasks;
 
 namespace Movie.Presentation.Controllers
 {
@@ -29,68 +30,33 @@ namespace Movie.Presentation.Controllers
             var movie = await serviceManager.MovieService.GetAsync(id);
             return movie;
         }
-        /*
-                // PUT: api/Movies/5
-                // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-                [HttpPut("{id}")]
-                public async Task<IActionResult> PutMovie(int id, MovieFilm movie)
-                {
-                    if (id != movie.Id)
-                    {
-                        return BadRequest();
-                    }
 
-                    context.Entry(movie).State = EntityState.Modified;
+        // PUT: api/Movies/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutMovie(int id, [FromBody] MovieDto movieDto)
+        {
+            await serviceManager.MovieService.PutAsync(id, movieDto);
 
-                    try
-                    {
-                        await context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!MovieExists(id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
+            return NoContent();
+        }
+        // POST: api/Movies
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<MovieDto>> PostMovie([FromBody] MovieCreateDto movieCreateDto)
+        {
+            var createdMovieDto = await serviceManager.MovieService.PostAsync(movieCreateDto);
+            return CreatedAtAction(nameof(GetMovie), new { id = createdMovieDto.Id }, createdMovieDto);
+        }
 
-                    return NoContent();
-                }
+        // DELETE: api/Movies/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMovie(int id)
+        {
 
-                // POST: api/Movies
-                // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-                [HttpPost]
-                public async Task<ActionResult<MovieFilm>> PostMovie(MovieFilm movie)
-                {
-                    context.Movies.Add(movie);
-                    await context.SaveChangesAsync();
+            await serviceManager.MovieService.DeleteAsync(id);
 
-                    return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
-                }
-
-                // DELETE: api/Movies/5
-                [HttpDelete("{id}")]
-                public async Task<IActionResult> DeleteMovie(int id)
-                {
-                    var movie = await context.Movies.FindAsync(id);
-                    if (movie == null)
-                    {
-                        return NotFound();
-                    }
-
-                    context.Movies.Remove(movie);
-                    await context.SaveChangesAsync();
-
-                    return NoContent();
-                }
-
-                private bool MovieExists(int id)
-                {
-                    return context.Movies.Any(e => e.Id == id);
-                }*/
+            return NoContent();
+        }
     }
 }

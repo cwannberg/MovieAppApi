@@ -19,7 +19,7 @@ public class MovieRepository : IMovieRepository
 
     public async Task PutAsync(int id, MovieFilm movie)
     {
-        _context.Entry(movie).State = EntityState.Modified;
+        _context.Movies.Update(movie);
         await _context.SaveChangesAsync();
     }
 

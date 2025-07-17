@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Movie.Core.Dtos;
+using Movie.Core.Entities;
 using Movie.Services.Contracts;
 
 namespace Movie.Services
@@ -15,30 +15,15 @@ namespace Movie.Services
             this.uow = uow;
             this.mapper = mapper;
         }
-
-        public async Task<IEnumerable<MovieDto>> GetAllAsync()
+        public async Task<IEnumerable<MovieDto>> GetAllAsync() => mapper.Map<IEnumerable<MovieDto>>(await uow.MovieRepository.GetAllAsync());
+        public async Task<MovieDto> GetAsync(int id) => mapper.Map<MovieDto>(await uow.MovieRepository.GetAsync(id));
+        public async Task PutAsync(int id, MovieDto movieDto) => await uow.MovieRepository.PutAsync(id, mapper.Map<MovieFilm>(movieDto));
+        public async Task<MovieDto> PostAsync(MovieCreateDto movieDto)
         {
-            return mapper.Map<IEnumerable<MovieDto>>(await uow.MovieRepository.GetAllAsync());
-        }
-        public async Task<MovieDto> GetAsync(int id)
-        {
-            var movie = await uow.MovieRepository.GetAsync(id);
+            var movie = mapper.Map<MovieFilm>(movieDto);
+            await uow.MovieRepository.PostAsync(movie);
             return mapper.Map<MovieDto>(movie);
         }
-
-        public Task PutAsync(int id, MovieDto item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task PostAsync(MovieDto item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task DeleteAsync(int id) => await uow.MovieRepository.DeleteAsync(id);
     }
 }

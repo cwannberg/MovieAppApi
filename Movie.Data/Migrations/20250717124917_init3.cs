@@ -5,7 +5,7 @@
 namespace Movie.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -107,7 +107,7 @@ namespace Movie.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Review",
+                name: "Reviews",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -118,9 +118,9 @@ namespace Movie.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Review", x => x.Id);
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Review_Movies_MovieId",
+                        name: "FK_Reviews_Movies_MovieId",
                         column: x => x.MovieId,
                         principalTable: "Movies",
                         principalColumn: "Id",
@@ -144,8 +144,8 @@ namespace Movie.Data.Migrations
                 column: "GenreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Review_MovieId",
-                table: "Review",
+                name: "IX_Reviews_MovieId",
+                table: "Reviews",
                 column: "MovieId");
         }
 
@@ -159,7 +159,7 @@ namespace Movie.Data.Migrations
                 name: "MovieDetails");
 
             migrationBuilder.DropTable(
-                name: "Review");
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "Actors");

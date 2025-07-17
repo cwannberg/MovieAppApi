@@ -2,5 +2,9 @@
 
 namespace Movie.Core.Dtos
 {
-    public class GenreDto([Required]string Name);
+    public record GenreDto {
+        public int Id {get; set; }
+        [Required]
+        public string Name { get; set; } = null!;
+    };
 }

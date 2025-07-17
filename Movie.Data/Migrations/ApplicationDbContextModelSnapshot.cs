@@ -153,7 +153,7 @@ namespace Movie.Data.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Review");
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("ActorMovieFilm", b =>
