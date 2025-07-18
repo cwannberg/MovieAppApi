@@ -9,6 +9,7 @@ namespace Movie.Data
         public MapperProfile()
         {
             CreateMap<Actor, ActorDto>();
+            CreateMap<ActorCreateDto, Actor>();
             CreateMap<MovieFilm, MovieDto>();
             CreateMap<MovieFilm, MovieCreateDto>();
             CreateMap<MovieCreateDto, MovieFilm>();

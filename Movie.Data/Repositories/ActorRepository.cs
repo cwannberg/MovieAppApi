@@ -1,4 +1,5 @@
-﻿using Movie.Core.DomainContracts;
+﻿using Microsoft.EntityFrameworkCore;
+using Movie.Core.DomainContracts;
 using Movie.Core.Entities;
 
 namespace Movie.Data.Repositories;
@@ -11,28 +12,38 @@ public class ActorRepository : IActorRepository
     {
         _context = context;
     }
-    public Task DeleteActor(int id)
+
+    public async Task<List<Actor>> GetAllAsync(int pageNumber, int pageSize)
     {
-        throw new NotImplementedException();
+        return await _context.Actors
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
     }
 
-    public Task<IEnumerable<Actor>> GetActorAsync()
+    public async Task<Actor> GetAsync(int id) => await _context.Actors.Where(a => a.Id == id).FirstOrDefaultAsync();
+
+    public async Task PutAsync(int id, Actor actor)
     {
-        throw new NotImplementedException();
+        _context.Actors.Update(actor);
+        await _context.SaveChangesAsync();
     }
 
-    public Task<Actor> GetActorAsync(int id)
+    public async Task PostAsync(Actor actor)
     {
-        throw new NotImplementedException();
+        _context.Actors.Add(actor);
+        await _context.SaveChangesAsync();
     }
 
-    public Task PostActorAsync(Actor actor)
+    public async Task DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var actor = await _context.Actors.FindAsync(id);
+        _context.Actors.Remove(actor);
+        await _context.SaveChangesAsync();
     }
 
-    public Task PutActorAsync(int id, Actor actor)
+    public async Task<int> GetTotalCountAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Actors.CountAsync();
     }
 }

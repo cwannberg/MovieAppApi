@@ -10,7 +10,6 @@ namespace Movie.Services.Contracts
         Task PutAsync(int id, MovieDto item);
         Task<MovieDto> PostAsync(MovieCreateDto item);
         Task DeleteAsync(int id);
-
         Task<PagedResult<MovieDto>> GetPagedAsync(int pageNumber, int pageSize);
     }
 }

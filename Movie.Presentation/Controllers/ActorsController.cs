@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Movie.Core;
 using Movie.Core.Dtos;
-using Movie.Core.Entities;
+using Movie.Services.Contracts;
+using System.Text.Json;
 
 namespace Movie.Presentation.Controllers
 {
@@ -10,101 +10,66 @@ namespace Movie.Presentation.Controllers
     [ApiController]
     public class ActorsController : ControllerBase
     {
-        private readonly ApplicationDbContext context;
+        private readonly IServiceManager serviceManager;
+        const int maxPageSize = 100;
 
-        public IMapper mapper { get; }
-
-        public ActorsController(ApplicationDbContext context, IMapper mapper)
+        public ActorsController(IServiceManager serviceManager)
         {
-            this.context = context;
-            this.mapper = mapper;
+            this.serviceManager = serviceManager;
         }
 
-        // GET: api/Actors
+        // GET: api/Movies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ActorDto>>> GetActor()
+        public async Task<ActionResult<PagedResult<IEnumerable<ActorDto>>>> GetActor(int pageNumber = 1, int pageSize = 10)
         {
-            var actors = await context.Actors.ToListAsync();
-            var actorDto = mapper.Map<IEnumerable<ActorDto>>(actors);
+            if (pageSize > maxPageSize)
+                pageSize = maxPageSize;
+            var result = await serviceManager.ActorService.GetPagedAsync(pageNumber, pageSize);
 
-            return Ok(actorDto);
+            var metaData = new
+            {
+                result.TotalItems,
+                result.CurrentPage,
+                result.PageSize,
+                result.TotalPages,
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
+
+            return Ok(result);
         }
 
-        // GET: api/Actors/5
+        // GET: api/Movies/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Actor>> GetActor(int id)
+        public async Task<ActionResult<ActorDto>> GetActor(int id)
         {
-            var actor = await context.Actors.FindAsync(id);
-
-            if (actor == null)
-            {
-                return NotFound();
-            }
-
+            var actor = await serviceManager.ActorService.GetAsync(id);
             return actor;
         }
 
-        // PUT: api/Actors/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // PUT: api/Movies/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActor(int id, Actor actor)
+        public async Task<IActionResult> PutActor(int id, [FromBody] ActorDto actorDto)
         {
-            if (id != actor.Id)
-            {
-                return BadRequest();
-            }
-
-            context.Entry(actor).State = EntityState.Modified;
-
-            try
-            {
-                await context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ActorExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await serviceManager.ActorService.PutAsync(id, actorDto);
 
             return NoContent();
         }
-
-        // POST: api/Actors
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/Movies
         [HttpPost]
-        public async Task<ActionResult<Actor>> PostActor(Actor actor)
+        public async Task<ActionResult<ActorDto>> PostActor([FromBody] ActorCreateDto actorCreateDto)
         {
-            context.Actors.Add(actor);
-            await context.SaveChangesAsync();
-
-            return CreatedAtAction("GetActor", new { id = actor.Id }, actor);
+            var createActorDto = await serviceManager.ActorService.PostAsync(actorCreateDto);
+            return CreatedAtAction(nameof(GetActor), new { id = createActorDto.Id }, createActorDto);
         }
 
-        // DELETE: api/Actors/5
+        // DELETE: api/Movies/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActor(int id)
         {
-            var actor = await context.Actors.FindAsync(id);
-            if (actor == null)
-            {
-                return NotFound();
-            }
 
-            context.Actors.Remove(actor);
-            await context.SaveChangesAsync();
+            await serviceManager.ActorService.DeleteAsync(id);
 
             return NoContent();
-        }
-
-        private bool ActorExists(int id)
-        {
-            return context.Actors.Any(e => e.Id == id);
         }
     }
 }

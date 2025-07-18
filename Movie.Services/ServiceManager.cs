@@ -18,7 +18,7 @@ public class ServiceManager : IServiceManager
     {
         _movieService = new Lazy<IMovieService>(() => new MovieService(uow, mapper));
         _reviewService = new Lazy<IReviewService>(() => new ReviewService(uow));
-        _actorService = new Lazy<IActorService>(() => new ActorService(uow));
+        _actorService = new Lazy<IActorService>(() => new ActorService(uow, mapper));
         _genreService = new Lazy<IGenreService>(() => new GenreService(uow, mapper));
     }
 }

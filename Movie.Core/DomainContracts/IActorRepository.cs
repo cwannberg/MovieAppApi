@@ -2,11 +2,12 @@
 
 namespace Movie.Core.DomainContracts;
 
-public interface IActorRepository
+public interface IActorRepository : IBaseRepository<Actor>
 {
-    Task<IEnumerable<Actor>> GetActorAsync();
-    Task<Actor> GetActorAsync(int id);
-    Task PutActorAsync(int id, Actor actor);
-    Task PostActorAsync(Actor actor);
-    Task DeleteActor(int id);
+    Task<List<Actor>> GetAllAsync(int pageSize, int pageNumber);
+    Task<Actor> GetAsync(int id);
+    Task PutAsync(int id, Actor actor);
+    Task PostAsync(Actor actor);
+    Task DeleteAsync(int id);
+    Task<int> GetTotalCountAsync();
 }
