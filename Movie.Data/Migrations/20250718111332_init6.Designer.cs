@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Movie.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250718111332_init6")]
+    partial class init6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,7 +23,7 @@ namespace Movie.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ActorMovie", b =>
+            modelBuilder.Entity("ActorMovieFilm", b =>
                 {
                     b.Property<int>("ActorsId")
                         .HasColumnType("int");
@@ -32,34 +35,7 @@ namespace Movie.Data.Migrations
 
                     b.HasIndex("MoviesId");
 
-                    b.ToTable("ActorMovie", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            ActorsId = 1,
-                            MoviesId = 4
-                        },
-                        new
-                        {
-                            ActorsId = 2,
-                            MoviesId = 1
-                        },
-                        new
-                        {
-                            ActorsId = 3,
-                            MoviesId = 3
-                        },
-                        new
-                        {
-                            ActorsId = 4,
-                            MoviesId = 2
-                        },
-                        new
-                        {
-                            ActorsId = 5,
-                            MoviesId = 3
-                        });
+                    b.ToTable("ActorMovieFilm");
                 });
 
             modelBuilder.Entity("Movie.Core.Entities.Actor", b =>
@@ -71,6 +47,9 @@ namespace Movie.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BirthYear")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MovieId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -183,7 +162,7 @@ namespace Movie.Data.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("ActorMovie", b =>
+            modelBuilder.Entity("ActorMovieFilm", b =>
                 {
                     b.HasOne("Movie.Core.Entities.Actor", null)
                         .WithMany()

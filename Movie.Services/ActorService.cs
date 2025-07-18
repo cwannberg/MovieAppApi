@@ -24,10 +24,11 @@ namespace Movie.Services
         public async Task<ActorDto> PostAsync(ActorCreateDto actorDto)
         {
             var actor = mapper.Map<Actor>(actorDto);
-            await uow.ActorRepository.PostAsync(actor);
-            await uow.CompleteAsync();
+                await uow.ActorRepository.PostAsync(actor);
+                await uow.CompleteAsync();
 
-            return mapper.Map<ActorDto>(actorDto);
+                return mapper.Map<ActorDto>(actorDto);
+            
         }
         public async Task DeleteAsync(int id) => await uow.ActorRepository.DeleteAsync(id);
         public async Task<ActorDto> GetAsync(int id) => mapper.Map<ActorDto>(await uow.ActorRepository.GetAsync(id));

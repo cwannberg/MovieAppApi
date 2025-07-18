@@ -16,6 +16,7 @@ public class ActorRepository : IActorRepository
     public async Task<List<Actor>> GetAllAsync(int pageNumber, int pageSize)
     {
         return await _context.Actors
+                    .Include(a => a.Movies)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
@@ -41,7 +42,6 @@ public class ActorRepository : IActorRepository
         _context.Actors.Remove(actor);
         await _context.SaveChangesAsync();
     }
-
     public async Task<int> GetTotalCountAsync()
     {
         return await _context.Actors.CountAsync();

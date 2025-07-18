@@ -13,6 +13,8 @@ namespace Movie.Data
             CreateMap<MovieFilm, MovieDto>();
             CreateMap<MovieFilm, MovieCreateDto>();
             CreateMap<MovieCreateDto, MovieFilm>();
+            CreateMap<MovieFilm, ActorsMoviesDto>();
+            CreateMap<MovieFilm, ActorsMoviesDto>().ReverseMap();
             CreateMap<Genre, GenreDto>();
             CreateMap<MovieDetails, MovieDetailDto>();
             CreateMap<Review, ReviewDto>();

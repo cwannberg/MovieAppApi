@@ -27,26 +27,26 @@ namespace Movie.Services
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             if (await context.Actors.AnyAsync(cancellationToken)) return;
 
+            if (await context.Movies.AnyAsync(cancellationToken)) return;
+
+            IEnumerable<MovieFilm> movies = null;
             try
             {
-                IEnumerable<Actor> actors = GenerateActors(5);
-                await context.Actors.AddRangeAsync(actors, cancellationToken);
+                movies = GenerateMovies(10);
+                await context.Movies.AddRangeAsync(movies, cancellationToken);
                 await context.SaveChangesAsync(cancellationToken);
-                logger.LogInformation("Actorseed complete.");
+                logger.LogInformation("Movieseed complete.");
             }
             catch (Exception ex)
             {
                 logger.LogError($"Data seed with error: {ex.Message}");
             }
-
-            if (await context.Movies.AnyAsync(cancellationToken)) return;
-
             try
             {
-                IEnumerable<MovieFilm> movies = GenerateMovies(5);
-                await context.Movies.AddRangeAsync(movies, cancellationToken);
+                IEnumerable<Actor> actors = GenerateActors(5, movies);
+                await context.Actors.AddRangeAsync(actors, cancellationToken);
                 await context.SaveChangesAsync(cancellationToken);
-                logger.LogInformation("Movieseed complete.");
+                logger.LogInformation("Actorseed complete.");
             }
             catch (Exception ex)
             {
@@ -65,13 +65,13 @@ namespace Movie.Services
                 logger.LogError($"Data seed with error: {ex.Message}");
             }
         }
-        private IEnumerable<Actor> GenerateActors(int numberOfActors)
+        private IEnumerable<Actor> GenerateActors(int numberOfActors, IEnumerable<MovieFilm> movies)
         {
             var faker = new Faker<Actor>("sv").Rules((f, a) =>
             {
                 a.Name = f.Person.FullName;
                 a.BirthYear = f.Random.Int(1940, 2010);
-                a.Movies = GenerateMovies(f.Random.Int(min: 1, max: 5));
+                a.Movies = f.PickRandom(movies, f.Random.Int(1, 5)).ToList();
             });
             return faker.Generate(numberOfActors);
         }

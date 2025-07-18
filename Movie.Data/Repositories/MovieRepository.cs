@@ -16,6 +16,7 @@ public class MovieRepository : IMovieRepository
     public async Task<List<MovieFilm>> GetAllAsync(int pageNumber, int pageSize)
     {
         return await _context.Movies
+                    .Include(m => m.Actors)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
