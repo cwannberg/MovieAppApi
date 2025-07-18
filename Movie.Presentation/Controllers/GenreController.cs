@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Movie.Core.Dtos;
+using Movie.Core;
 using Movie.Core.Entities;
 using Movie.Services.Contracts;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Movie.Presentation.Controllers
 {
@@ -11,6 +13,7 @@ namespace Movie.Presentation.Controllers
     public class GenreController : ControllerBase
     {
         private readonly IServiceManager serviceManager;
+        const int maxPageSize = 100;
 
         public GenreController(IServiceManager serviceManager)
         {
@@ -19,9 +22,22 @@ namespace Movie.Presentation.Controllers
 
         // GET: api/Genres
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GenreDto>>> GetGenre()
+        public async Task<ActionResult<PagedResult<IEnumerable<GenreDto>>>> GetGenre(int pageNumber = 1, int pageSize = 10)
         {
-            return Ok(await serviceManager.GenreService.GetAllAsync());
+            if (pageSize > maxPageSize)
+                pageSize = maxPageSize;
+            var result = await serviceManager.MovieService.GetPagedAsync(pageNumber, pageSize);
+
+            var metaData = new
+            {
+                result.TotalItems,
+                result.CurrentPage,
+                result.PageSize,
+                result.TotalPages,
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
+
+            return Ok(result);
         }
 
         [HttpPost]

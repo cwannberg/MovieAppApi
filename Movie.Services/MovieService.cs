@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Movie.Core.Dtos;
+using Movie.Core;
 using Movie.Core.Entities;
 using Movie.Services.Contracts;
 
@@ -15,7 +16,11 @@ namespace Movie.Services
             this.uow = uow;
             this.mapper = mapper;
         }
-        public async Task<IEnumerable<MovieDto>> GetAllAsync() => mapper.Map<IEnumerable<MovieDto>>(await uow.MovieRepository.GetAllAsync());
+        public async Task<IEnumerable<MovieDto>> GetAllAsync(int pageNumber, int pageSize)
+        {
+            var movies = await uow.MovieRepository.GetAllAsync(pageNumber, pageSize);
+            return mapper.Map<IEnumerable<MovieDto>>(movies);
+        }
         public async Task<MovieDto> GetAsync(int id) => mapper.Map<MovieDto>(await uow.MovieRepository.GetAsync(id));
         public async Task PutAsync(int id, MovieDto movieDto) => await uow.MovieRepository.PutAsync(id, mapper.Map<MovieFilm>(movieDto));
         public async Task<MovieDto> PostAsync(MovieCreateDto movieDto)
@@ -37,5 +42,20 @@ namespace Movie.Services
             //return mapper.Map<MovieDto>(movie);
         }
         public async Task DeleteAsync(int id) => await uow.MovieRepository.DeleteAsync(id);
+
+        public async Task<PagedResult<MovieDto>> GetPagedAsync(int pageNumber, int pageSize)
+        {
+            var totalItems = await uow.MovieRepository.GetTotalCountAsync();
+            var movies = await uow.MovieRepository.GetAllAsync(pageNumber, pageSize);
+            var moviesDto = mapper.Map<IEnumerable<MovieDto>>(movies);
+            return new PagedResult<MovieDto>
+            {
+                Data = moviesDto,
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
+            };
+        }
     }
 }

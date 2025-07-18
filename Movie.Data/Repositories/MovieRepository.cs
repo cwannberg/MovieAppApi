@@ -13,7 +13,13 @@ public class MovieRepository : IMovieRepository
         _context = context;
     }
 
-    public async Task<List<MovieFilm>> GetAllAsync() => await _context.Movies.ToListAsync();
+    public async Task<List<MovieFilm>> GetAllAsync(int pageNumber, int pageSize)
+    {
+        return await _context.Movies
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+    }
 
     public async Task<MovieFilm> GetAsync(int id) => await _context.Movies.Where(m => m.Id == id).FirstOrDefaultAsync();
 
@@ -34,5 +40,10 @@ public class MovieRepository : IMovieRepository
         var movie = await _context.Movies.FindAsync(id);
         _context.Movies.Remove(movie);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<int> GetTotalCountAsync()
+    {
+        return await _context.Movies.CountAsync();
     }
 }

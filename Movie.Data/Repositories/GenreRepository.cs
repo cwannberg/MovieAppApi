@@ -13,7 +13,13 @@ public class GenreRepository : IGenreRepository
         _context = context;
     }
 
-    public async Task<List<Genre>> GetAllAsync() => await _context.Genres.ToListAsync();
+    public async Task<List<Genre>> GetAllAsync(int pageNumber, int pageSize)
+    {
+        return await _context.Genres
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+    }
 
     public async Task<Genre> GetAsync(int id) => await _context.Genres.Where(m => m.Id == id).FirstOrDefaultAsync();
 
@@ -38,5 +44,9 @@ public class GenreRepository : IGenreRepository
     public async Task<bool> ExistsAsync(int genreId)
     {
         return await _context.Genres.AnyAsync(g => g.Id == genreId);
+    }
+    public async Task<int> GetTotalCountAsync()
+    {
+        return await _context.Genres.CountAsync();
     }
 }

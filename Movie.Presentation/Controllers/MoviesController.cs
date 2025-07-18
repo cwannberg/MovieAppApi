@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Movie.Core;
 using Movie.Core.Dtos;
 using Movie.Services.Contracts;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Movie.Presentation.Controllers
 {
@@ -10,6 +11,7 @@ namespace Movie.Presentation.Controllers
     public class MoviesController : ControllerBase
     {
         private readonly IServiceManager serviceManager;
+        const int maxPageSize = 100;
 
         public MoviesController(IServiceManager serviceManager)
         {
@@ -17,12 +19,25 @@ namespace Movie.Presentation.Controllers
         }
 
         // GET: api/Movies
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovie()
+        [HttpGet ]
+        public async Task<ActionResult<PagedResult<IEnumerable<MovieDto>>>> GetMovie(int pageNumber = 1, int pageSize = 10)
         {
-            return Ok(await serviceManager.MovieService.GetAllAsync());
+            if (pageSize > maxPageSize)
+                pageSize = maxPageSize;
+            var result = await serviceManager.MovieService.GetPagedAsync(pageNumber, pageSize);
+
+            var metaData = new
+            {
+                result.TotalItems,
+                result.CurrentPage,
+                result.PageSize,
+                result.TotalPages,
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
+
+            return Ok(result);
         }
-        
+
         // GET: api/Movies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieDto>> GetMovie(int id)
